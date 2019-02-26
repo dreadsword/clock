@@ -10,9 +10,14 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    @IBOutlet var clock: ClockButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (timer) in
+            self.clock.setNeedsDisplay()
+        }
     }
 
 
