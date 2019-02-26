@@ -10,7 +10,7 @@ import UIKit
 
 class ClockButton: UIButton
 {
-    var secondsHand:UIBezierPath
+    var secondHand:UIBezierPath
     var smallHand:UIBezierPath
     var bigHand:UIBezierPath
     var thecenter:CGPoint
@@ -19,7 +19,7 @@ class ClockButton: UIButton
     
     required init?(coder: NSCoder)
     {
-        secondsHand = UIBezierPath()
+        secondHand = UIBezierPath()
         smallHand = UIBezierPath()
         bigHand = UIBezierPath()
         thecenter = CGPoint()
@@ -38,16 +38,16 @@ class ClockButton: UIButton
         let smalllength = (width / 2.0) - ringwidth - 65
         let biglength = (width / 2.0) - ringwidth - 35
         
-        secondsHand.move(to: CGPoint(x: thecenter.x, y: thecenter.y))
-        secondsHand.addLine(to: CGPoint(x: thecenter.x, y: thecenter.y - 1.0))
-        secondsHand.addLine(to: CGPoint(x: thecenter.x + (secondslength - 25.0), y: thecenter.y - 1.0))
-        secondsHand.addLine(to: CGPoint(x: thecenter.x + (secondslength - 20.0), y: thecenter.y - 3.0))
-        secondsHand.addLine(to: CGPoint(x: thecenter.x + secondslength, y: thecenter.y))
-        secondsHand.addLine(to: CGPoint(x: thecenter.x + (secondslength - 20.0), y: thecenter.y + 3.0))
-        secondsHand.addLine(to: CGPoint(x: thecenter.x + (secondslength - 25.0), y: thecenter.y + 1.0))
-        secondsHand.addLine(to: CGPoint(x: thecenter.x, y: thecenter.y + 1.0))
-        secondsHand.addLine(to: CGPoint(x: thecenter.x, y: thecenter.y))
-        secondsHand.close()
+        secondHand.move(to: CGPoint(x: thecenter.x, y: thecenter.y))
+        secondHand.addLine(to: CGPoint(x: thecenter.x, y: thecenter.y - 1.0))
+        secondHand.addLine(to: CGPoint(x: thecenter.x + (secondslength - 25.0), y: thecenter.y - 1.0))
+        secondHand.addLine(to: CGPoint(x: thecenter.x + (secondslength - 20.0), y: thecenter.y - 3.0))
+        secondHand.addLine(to: CGPoint(x: thecenter.x + secondslength, y: thecenter.y))
+        secondHand.addLine(to: CGPoint(x: thecenter.x + (secondslength - 20.0), y: thecenter.y + 3.0))
+        secondHand.addLine(to: CGPoint(x: thecenter.x + (secondslength - 25.0), y: thecenter.y + 1.0))
+        secondHand.addLine(to: CGPoint(x: thecenter.x, y: thecenter.y + 1.0))
+        secondHand.addLine(to: CGPoint(x: thecenter.x, y: thecenter.y))
+        secondHand.close()
         
         
         smallHand.move(to: CGPoint(x: thecenter.x, y: thecenter.y))
@@ -81,6 +81,7 @@ class ClockButton: UIButton
         let color = UIColor(displayP3Red: 0.1, green: 0.9, blue: 0.1, alpha: 1.0)
         let handcolor = UIColor(red: 0.6, green: 0.6, blue: 0.6, alpha: 1.00)
         
+        
         //
         // Ring
         //
@@ -104,7 +105,6 @@ class ClockButton: UIButton
         //
         let tickstart_r = (width / 2.0) - ringwidth - 10
         let tickend_r = (width / 2.0) - ringwidth
-        
         for second in 0...59
         {
             let tickstart = DegreesToPoint(degrees: CGFloat(second * 6), radius: tickstart_r, origin: thecenter)
@@ -117,13 +117,13 @@ class ClockButton: UIButton
             tick.lineWidth = 1.0;
             tick.stroke()
         }
+      
         
         //
         // hours ticks
         //
         let tickstart_h_r = (width / 2.0) - ringwidth - 15
         let tickend_h_r = (width / 2.0) - ringwidth
-        
         for hour in 0...12
         {
             let tickstart = DegreesToPoint(degrees: CGFloat(hour * 30), radius: tickstart_h_r, origin: thecenter)
@@ -162,7 +162,7 @@ class ClockButton: UIButton
         
         
         //
-        // hands
+        // Get time
         //
         let date = Date()
         let calendar = Calendar.current
@@ -178,6 +178,7 @@ class ClockButton: UIButton
         let angleBig = (360 + 90) - Float(minute * 6)
         drawHand(path: copiedBigHand, angle: angleBig, color: handcolor, fill:true)
         
+        
         //
         // Small hand
         //
@@ -187,16 +188,19 @@ class ClockButton: UIButton
         let angleSmall = (360 + 90) - Float(ffhm * 6)
         drawHand(path: copiedSmallHand, angle: angleSmall, color: handcolor, fill:true)
         
+        
         //
-        // second hand. Rotate then translate back to thecenter of box
+        // second hand
         //
-        let copiedPath = secondsHand.copy() as! UIBezierPath
+        let copiedPath = secondHand.copy() as! UIBezierPath
         let angle = (360 + 90) - Float(second * 6)
         drawHand(path: copiedPath, angle: angle, color: UIColor.purple, fill:true)
         
     }
     
-    
+    //
+    // Draw a hand. Rotate then translate back to the center of clock face.
+    //
     func drawHand(path:UIBezierPath, angle:Float, color:UIColor, fill:Bool)
     {
         let copiedHand = path.copy() as! UIBezierPath
