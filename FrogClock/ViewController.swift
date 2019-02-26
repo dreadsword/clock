@@ -8,18 +8,50 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController
+{
 
     @IBOutlet var clock: ClockButton!
     
-    override func viewDidLoad() {
+    var stop: Bool
+    
+    
+    required init?(coder: NSCoder)
+    {
+         stop = false
+        
+        super.init(coder: coder)
+    }
+    
+    
+    override func viewDidLoad()
+    {
         super.viewDidLoad()
         
-        _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (timer) in
+        stop = false
+    }
+    
+    
+    func startTimer()
+    {
+        stop = false
+        
+        Timer.scheduledTimer(withTimeInterval: 1, repeats: true)
+        { (timer) in
+            
             self.clock.setNeedsDisplay()
+            if (self.stop)
+            {
+                timer.invalidate()
+            }
         }
     }
 
-
+    
+    func stopTimer()
+    {
+        stop = true
+    }
+    
 }
 
