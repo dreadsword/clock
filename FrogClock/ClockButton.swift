@@ -226,7 +226,6 @@ class ClockButton: UIButton
 }
 
 
-
 extension Float
 {
     var degreesToRadians : CGFloat
@@ -234,7 +233,6 @@ extension Float
         return CGFloat(self) * CGFloat(Double.pi) / 180.0
     }
 }
-
 
 
 func DegreesToPoint(degrees:CGFloat, radius:CGFloat, origin:CGPoint) -> CGPoint
