@@ -16,6 +16,7 @@ class ClockButton: UIButton
     var thecenter:CGPoint
     var width:CGFloat
     var height:CGFloat
+    var ringdown:Bool
     
     required init?(coder: NSCoder)
     {
@@ -26,9 +27,13 @@ class ClockButton: UIButton
         width = CGFloat()
         height = CGFloat()
         
+        ringdown = false
+        
         super.init(coder: coder)
         
-        
+        clearsContextBeforeDrawing = false;
+
+
         let ringwidth:CGFloat = 3.0
         width = self.frame.width
         height = self.frame.height
@@ -78,10 +83,13 @@ class ClockButton: UIButton
     
     override func draw(_ rect: CGRect)
     {
-        let color = UIColor(displayP3Red: 0.1, green: 0.9, blue: 0.1, alpha: 1.0)
-        let handcolor = UIColor(red: 0.6, green: 0.6, blue: 0.6, alpha: 1.00)
+        let color = UIColor(displayP3Red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
+        let handcolor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
         
+        clearsContextBeforeDrawing = false;
         
+        if (ringdown == false)
+        {
         //
         // Ring
         //
@@ -159,6 +167,9 @@ class ClockButton: UIButton
             let fontbox = CGRect(x:fontpoint.x - 7.5,y:fontpoint.y - 7.5,width:15.0,height:15.0)
             string.draw(in:fontbox, withAttributes: number_attr)
         }
+            
+            ringdown = true
+        }
         
         
         //
@@ -194,7 +205,7 @@ class ClockButton: UIButton
         //
         let copiedPath = secondHand.copy() as! UIBezierPath
         let angle = (360 + 90) - Float(second * 6)
-        drawHand(path: copiedPath, angle: angle, color: UIColor.purple, fill:true)
+        drawHand(path: copiedPath, angle: angle, color: handcolor, fill:true)
         
     }
     
