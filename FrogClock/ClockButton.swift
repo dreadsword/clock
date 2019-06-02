@@ -16,6 +16,9 @@ class ClockButton: UIButton
     var thecenter:CGPoint
     var width:CGFloat
     var height:CGFloat
+    var oldAngleBig:Float
+    var oldAngleSmall:Float
+    var oldAngle:Float
     var ringdown:Bool
     
     required init?(coder: NSCoder)
@@ -28,10 +31,11 @@ class ClockButton: UIButton
         height = CGFloat()
         
         ringdown = false
-        
+        oldAngleBig = -1.0
+        oldAngleSmall = -1.0
+        oldAngle = -1.0
+
         super.init(coder: coder)
-        
-        clearsContextBeforeDrawing = false;
 
 
         let ringwidth:CGFloat = 3.0
@@ -83,11 +87,13 @@ class ClockButton: UIButton
     
     override func draw(_ rect: CGRect)
     {
-        let color = UIColor(displayP3Red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
-        let handcolor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
+        super.draw(rect)
         
-        clearsContextBeforeDrawing = false;
+        let color = UIColor(displayP3Red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        let handcolor = UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 1.0)
+        let erasehandcolor = UIColor(red: 0.0, green: 0.0, blue: 1.0, alpha: 1.0)
         
+
         if (ringdown == false)
         {
         //
@@ -186,8 +192,13 @@ class ClockButton: UIButton
         // big hand
         //
         let copiedBigHand = bigHand.copy() as! UIBezierPath
+        if (oldAngleBig >= 0)
+        {
+            drawHand(path: copiedBigHand, angle: oldAngleBig, color: erasehandcolor, fill:true)
+        }
         let angleBig = (360 + 90) - Float(minute * 6)
         drawHand(path: copiedBigHand, angle: angleBig, color: handcolor, fill:true)
+        oldAngleBig = angleBig
         
         
         //
@@ -196,8 +207,14 @@ class ClockButton: UIButton
         let hm = CGFloat(minute) / 60
         let ffhm = (hour * 5) + Int(5 * hm);
         let copiedSmallHand = smallHand.copy() as! UIBezierPath
+        if (oldAngleSmall >= 0)
+        {
+            drawHand(path: copiedSmallHand, angle: oldAngleSmall, color: erasehandcolor, fill:true)
+        }
         let angleSmall = (360 + 90) - Float(ffhm * 6)
         drawHand(path: copiedSmallHand, angle: angleSmall, color: handcolor, fill:true)
+        oldAngleSmall = angleSmall
+        
         
         
         //
@@ -205,7 +222,12 @@ class ClockButton: UIButton
         //
         let copiedPath = secondHand.copy() as! UIBezierPath
         let angle = (360 + 90) - Float(second * 6)
+        if (oldAngle >= 0)
+        {
+            drawHand(path: copiedPath, angle: oldAngle, color:erasehandcolor, fill:true)
+        }
         drawHand(path: copiedPath, angle: angle, color: handcolor, fill:true)
+        oldAngle = angle
         
     }
     
